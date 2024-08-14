@@ -1,5 +1,5 @@
 {
-  "pluginAlias": "ExampleHomebridgePlugin",
+  "pluginAlias": "KomfoventModbus",
   "pluginType": "platform",
   "singular": true,
   "schema": {
