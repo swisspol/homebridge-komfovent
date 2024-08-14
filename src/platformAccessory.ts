@@ -34,9 +34,6 @@ export class ExamplePlatformAccessory {
   handleCurrentTemperatureGet() {
     this.platform.log.debug("Triggered GET CurrentTemperature");
 
-    // set this to a valid value for CurrentTemperature
-    const currentValue = -270;
-
-    return currentValue;
+    return 42; // TODO
   }
 }
