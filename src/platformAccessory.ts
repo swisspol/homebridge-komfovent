@@ -25,7 +25,7 @@ const EXTRACT_TEMPERATURE_REGISTER = 2006; // x10
 // 2220 = total recovered energy (kWh)
 
 export class ExamplePlatformAccessory {
-  private activeSwitch: Service;
+  private fan: Service;
   private supplyTemperature: Service;
   private extractTemperature: Service;
 
@@ -39,17 +39,13 @@ export class ExamplePlatformAccessory {
       .setCharacteristic(this.platform.Characteristic.Model, 'N/A')
       .setCharacteristic(this.platform.Characteristic.SerialNumber, 'N/A');
 
-    this.activeSwitch =
+    this.fan =
       this.accessory.getService('Active') ||
-      this.accessory.addService(
-        this.platform.Service.Switch,
-        'Active',
-        'active',
-      );
-    this.activeSwitch
+      this.accessory.addService(this.platform.Service.Fan, 'Fan', 'fan');
+    this.fan
       .getCharacteristic(this.platform.Characteristic.On)
-      .onGet(this.getActiveSwitch.bind(this))
-      .onSet(this.setActiveSwitch.bind(this));
+      .onGet(this.getFan.bind(this))
+      .onSet(this.setFan.bind(this));
 
     this.supplyTemperature =
       this.accessory.getService('Supply') ||
@@ -137,15 +133,15 @@ export class ExamplePlatformAccessory {
     return value / 10;
   }
 
-  async getActiveSwitch(): Promise<boolean> {
-    this.platform.log.debug('Triggered getActiveSwitch');
+  async getFan(): Promise<boolean> {
+    this.platform.log.debug('Triggered getFan');
     const value = await this.readRegister(MODE_REGISTER);
     return value !== MODE_OFF;
   }
 
-  async setActiveSwitch(value: CharacteristicValue): Promise<void> {
+  async setFan(value: CharacteristicValue): Promise<void> {
     const active = value as boolean;
-    this.platform.log.debug('Triggered setActiveSwitch');
+    this.platform.log.debug('Triggered setFan');
     this.writeRegister(MODE_REGISTER, active ? MODE_COMFORT_1 : MODE_OFF);
   }
 }
