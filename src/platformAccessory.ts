@@ -26,7 +26,7 @@ export class ExamplePlatformAccessory {
       this.accessory.addService(this.platform.Service.TemperatureSensor);
     this.supplyTemperature.setCharacteristic(
       this.platform.Characteristic.Name,
-      'Supply Temperature',
+      'Supply',
     );
     this.supplyTemperature
       .getCharacteristic(this.platform.Characteristic.CurrentTemperature)
