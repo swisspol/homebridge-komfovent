@@ -78,7 +78,7 @@ export class ExamplePlatformAccessory {
     let result = 0;
     try {
       await promiseSocket
-        .setTimeout(3000)
+        .setTimeout(2000)
         .connect(MODBUS_PORT, this.platform.config.ip_address);
       const resp = await client.readHoldingRegisters(register, 1);
       const values = resp.response.body.valuesAsArray;
