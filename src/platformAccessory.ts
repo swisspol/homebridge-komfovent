@@ -33,9 +33,7 @@ export class ExamplePlatformAccessory {
       .onGet(this.getSupplyTemperature.bind(this));
   }
 
-  async getSupplyTemperature() {
-    this.platform.log.debug('Triggered GET CurrentTemperature');
-
+  async readRegister(register: number) {
     const socket = new Socket();
     const client = new Modbus.client.TCP(socket);
     const promiseSocket = new PromiseSocket(socket);
@@ -45,10 +43,7 @@ export class ExamplePlatformAccessory {
       await promiseSocket
         .setTimeout(3000)
         .connect(MODBUS_PORT, this.platform.config.ip_address);
-      const resp = await client.readHoldingRegisters(
-        SUPPLY_TEMPERATURE_REGISTER,
-        1,
-      );
+      const resp = await client.readHoldingRegisters(register, 1);
       const values = resp.response.body.valuesAsArray;
       result = values[0];
     } catch (error) {
@@ -64,5 +59,11 @@ export class ExamplePlatformAccessory {
     }
 
     return result;
+  }
+
+  async getSupplyTemperature() {
+    this.platform.log.debug('Triggered getSupplyTemperature');
+    const value = await this.readRegister(SUPPLY_TEMPERATURE_REGISTER);
+    return value / 10;
   }
 }
