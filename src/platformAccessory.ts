@@ -61,7 +61,7 @@ export class ExamplePlatformAccessory {
     return result;
   }
 
-  async getSupplyTemperature() {
+  async getSupplyTemperature(): Promise<number> {
     this.platform.log.debug('Triggered getSupplyTemperature');
     const value = await this.readRegister(SUPPLY_TEMPERATURE_REGISTER);
     return value / 10;
