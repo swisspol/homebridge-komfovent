@@ -8,8 +8,7 @@
       "ip_address": {
         "title": "IP Address",
         "type": "string",
-        "required": true,
-        "default": "10.10.10.10"
+        "required": true
       }
     }
   }

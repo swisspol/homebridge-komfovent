@@ -30,6 +30,8 @@ export class ExamplePlatformAccessory {
   handleSupplyTemperatureGet() {
     this.platform.log.debug('Triggered GET CurrentTemperature');
 
+    this.platform.log.info('Reading from', this.platform.config.ip_address);
+
     return 42; // TODO
   }
 }
