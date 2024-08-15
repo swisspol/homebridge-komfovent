@@ -32,6 +32,7 @@
     "@eslint/js": "^9.9.0",
     "@types/eslint__js": "^8.42.3",
     "@types/node": "^22.2.0",
+    "@types/serialport": "^8.0.5",
     "eslint": "^9.9.0",
     "homebridge": "^2.0.0-beta.0",
     "nodemon": "^3.1.4",
@@ -42,6 +43,7 @@
   },
   "dependencies": {
     "jsmodbus": "^4.0.10",
-    "promise-socket": "^8.0.0"
+    "promise-socket": "^8.0.0",
+    "serialport": "^9.2.8"
   }
 }
