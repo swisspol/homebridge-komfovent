@@ -70,6 +70,16 @@ export class ExamplePlatformAccessory {
       .onGet(this.getExtractTemperature.bind(this));
   }
 
+  logRegisterError(message: string, register: number, error: unknown) {
+    if (error instanceof Error) {
+      this.platform.log.error(message, error.name, error.message);
+    } else if (typeof error === 'string') {
+      this.platform.log.error(message, error);
+    } else {
+      this.platform.log.error(message, 'Unknown exception', typeof error);
+    }
+  }
+
   async readRegister(register: number): Promise<number> {
     const socket = new Socket();
     const client = new Modbus.client.TCP(socket);
@@ -84,13 +94,7 @@ export class ExamplePlatformAccessory {
       const values = resp.response.body.valuesAsArray;
       result = values[0];
     } catch (error) {
-      if (error instanceof Error) {
-        this.platform.log.error(error.name, error.message);
-      } else if (typeof error === 'string') {
-        this.platform.log.error(error);
-      } else {
-        this.platform.log.error('Unknown exception', typeof error);
-      }
+      this.logRegisterError('Failed reading register', register, error);
     } finally {
       await promiseSocket.end();
     }
@@ -109,13 +113,7 @@ export class ExamplePlatformAccessory {
         .connect(MODBUS_PORT, this.platform.config.ip_address);
       await client.writeSingleRegister(register, value);
     } catch (error) {
-      if (error instanceof Error) {
-        this.platform.log.error(error.name, error.message);
-      } else if (typeof error === 'string') {
-        this.platform.log.error(error);
-      } else {
-        this.platform.log.error('Unknown exception', typeof error);
-      }
+      this.logRegisterError('Failed writing register', register, error);
     } finally {
       await promiseSocket.end();
     }
