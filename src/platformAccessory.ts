@@ -1,6 +1,12 @@
 import type { PlatformAccessory, Service } from 'homebridge';
+import { Socket } from 'net';
+import Modbus from 'jsmodbus';
+import PromiseSocket from 'promise-socket';
 
 import type { ExampleHomebridgePlatform } from './platform.js';
+
+const MODBUS_PORT = 502;
+const SUPPLY_TEMPERATURE_REGISTER = 2005;
 
 export class ExamplePlatformAccessory {
   private supplyTemperature: Service;
@@ -24,14 +30,39 @@ export class ExamplePlatformAccessory {
     );
     this.supplyTemperature
       .getCharacteristic(this.platform.Characteristic.CurrentTemperature)
-      .onGet(this.handleSupplyTemperatureGet.bind(this));
+      .onGet(this.getSupplyTemperature.bind(this));
   }
 
-  handleSupplyTemperatureGet() {
+  async getSupplyTemperature() {
     this.platform.log.debug('Triggered GET CurrentTemperature');
 
-    this.platform.log.info('Reading from', this.platform.config.ip_address);
+    const socket = new Socket();
+    const client = new Modbus.client.TCP(socket);
+    const promiseSocket = new PromiseSocket(socket);
 
-    return 42; // TODO
+    let result = 0;
+    try {
+      await promiseSocket
+        .setTimeout(3000)
+        .connect(MODBUS_PORT, this.platform.config.ip_address);
+      const resp = await client.readHoldingRegisters(
+        SUPPLY_TEMPERATURE_REGISTER,
+        1,
+      );
+      const values = resp.response.body.valuesAsArray;
+      result = values[0];
+    } catch (error) {
+      if (error instanceof Error) {
+        this.platform.log.error(error.name, error.message);
+      } else if (typeof error === 'string') {
+        this.platform.log.error(error);
+      } else {
+        this.platform.log.error('Unknown exception', typeof error);
+      }
+    } finally {
+      await promiseSocket.end();
+    }
+
+    return result;
   }
 }
