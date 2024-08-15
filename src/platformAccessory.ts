@@ -6,10 +6,21 @@ import PromiseSocket from 'promise-socket';
 import type { ExampleHomebridgePlatform } from './platform.js';
 
 const MODBUS_PORT = 502;
-const SUPPLY_TEMPERATURE_REGISTER = 2005;
+const SUPPLY_TEMPERATURE_REGISTER = 2005; // x10
+const EXTRACT_TEMPERATURE_REGISTER = 2006; // x10
+// 0 = mode (OFF = 0, Comfort 1 = 1, etc...)
+// 999-1008: alarms?
+// 2002 = supply flow (m3/h)
+// 2005 = extract flow (m3/h)
+// 2020 = supply fan (% x 10)
+// 2021 = exhaust fan (% x 10)
+// 2211 = total supply fan (h)
+// 2213 = total exhaust fan (h)
+// 2220 = total recovered energy (kWh)
 
 export class ExamplePlatformAccessory {
   private supplyTemperature: Service;
+  private extractTemperature: Service;
 
   constructor(
     private readonly platform: ExampleHomebridgePlatform,
@@ -31,6 +42,17 @@ export class ExamplePlatformAccessory {
     this.supplyTemperature
       .getCharacteristic(this.platform.Characteristic.CurrentTemperature)
       .onGet(this.getSupplyTemperature.bind(this));
+
+    this.extractTemperature =
+      this.accessory.getService(this.platform.Service.TemperatureSensor) ||
+      this.accessory.addService(this.platform.Service.TemperatureSensor);
+    this.extractTemperature.setCharacteristic(
+      this.platform.Characteristic.Name,
+      'Extract',
+    );
+    this.extractTemperature
+      .getCharacteristic(this.platform.Characteristic.CurrentTemperature)
+      .onGet(this.getExtractTemperature.bind(this));
   }
 
   async readRegister(register: number) {
@@ -64,6 +86,12 @@ export class ExamplePlatformAccessory {
   async getSupplyTemperature(): Promise<number> {
     this.platform.log.debug('Triggered getSupplyTemperature');
     const value = await this.readRegister(SUPPLY_TEMPERATURE_REGISTER);
+    return value / 10;
+  }
+
+  async getExtractTemperature(): Promise<number> {
+    this.platform.log.debug('Triggered getExtractTemperature');
+    const value = await this.readRegister(EXTRACT_TEMPERATURE_REGISTER);
     return value / 10;
   }
 }
