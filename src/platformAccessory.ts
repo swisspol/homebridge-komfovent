@@ -40,7 +40,7 @@ export class ExamplePlatformAccessory {
       .setCharacteristic(this.platform.Characteristic.SerialNumber, 'N/A');
 
     this.fan =
-      this.accessory.getService('Active') ||
+      this.accessory.getService('Fan') ||
       this.accessory.addService(this.platform.Service.Fan, 'Fan', 'fan');
     this.fan
       .getCharacteristic(this.platform.Characteristic.On)
@@ -140,8 +140,8 @@ export class ExamplePlatformAccessory {
   }
 
   async setFan(value: CharacteristicValue): Promise<void> {
-    const active = value as boolean;
+    const on = value as boolean;
     this.platform.log.debug('Triggered setFan');
-    this.writeRegister(MODE_REGISTER, active ? MODE_COMFORT_1 : MODE_OFF);
+    this.writeRegister(MODE_REGISTER, on ? MODE_COMFORT_1 : MODE_OFF);
   }
 }
