@@ -46,8 +46,9 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
   }
 
   discoverDevices() {
-    const uniqueID = 'test'; // TODO
-    const displayName = 'TEST'; // TODO
+    const uniqueID = 'komfovent';
+    const displayName = 'Komfovent';
+
     const uuid = this.api.hap.uuid.generate(uniqueID);
     const existingAccessory = this.accessories.find(
       (accessory) => accessory.UUID === uuid,
@@ -61,7 +62,6 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
     } else {
       this.log.info('Adding new accessory:', displayName);
       const accessory = new this.api.platformAccessory(displayName, uuid);
-      // accessory.context.device = null; // TODO
       new ExamplePlatformAccessory(this, accessory);
       this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
         accessory,

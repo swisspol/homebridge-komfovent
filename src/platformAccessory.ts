@@ -11,7 +11,7 @@ export class ExamplePlatformAccessory {
   ) {
     this.accessory
       .getService(this.platform.Service.AccessoryInformation)!
-      .setCharacteristic(this.platform.Characteristic.Manufacturer, 'Daikin')
+      .setCharacteristic(this.platform.Characteristic.Manufacturer, 'Komfovent')
       .setCharacteristic(this.platform.Characteristic.Model, 'N/A')
       .setCharacteristic(this.platform.Characteristic.SerialNumber, 'N/A');
 
