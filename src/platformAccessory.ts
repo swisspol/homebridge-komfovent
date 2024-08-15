@@ -72,11 +72,11 @@ export class ExamplePlatformAccessory {
 
   logRegisterError(message: string, register: number, error: unknown) {
     if (error instanceof Error) {
-      this.platform.log.error(message, error.name, error.message);
+      this.platform.log.error(message, register, error.name, error.message);
     } else if (typeof error === 'string') {
-      this.platform.log.error(message, error);
+      this.platform.log.error(message, register, error);
     } else {
-      this.platform.log.error(message, 'Unknown exception', typeof error);
+      this.platform.log.error(message, register, typeof error);
     }
   }
 
@@ -88,7 +88,7 @@ export class ExamplePlatformAccessory {
     let result = 0;
     try {
       await promiseSocket
-        .setTimeout(2000)
+        .setTimeout(5000)
         .connect(MODBUS_PORT, this.platform.config.ip_address);
       const resp = await client.readHoldingRegisters(register, 1);
       const values = resp.response.body.valuesAsArray;
