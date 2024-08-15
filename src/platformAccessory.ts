@@ -33,23 +33,23 @@ export class ExamplePlatformAccessory {
       .setCharacteristic(this.platform.Characteristic.SerialNumber, 'N/A');
 
     this.supplyTemperature =
-      this.accessory.getService(this.platform.Service.TemperatureSensor) ||
-      this.accessory.addService(this.platform.Service.TemperatureSensor);
-    this.supplyTemperature.setCharacteristic(
-      this.platform.Characteristic.Name,
-      'Supply',
-    );
+      this.accessory.getService('Supply') ||
+      this.accessory.addService(
+        this.platform.Service.TemperatureSensor,
+        'Supply',
+        'supply',
+      );
     this.supplyTemperature
       .getCharacteristic(this.platform.Characteristic.CurrentTemperature)
       .onGet(this.getSupplyTemperature.bind(this));
 
     this.extractTemperature =
-      this.accessory.getService(this.platform.Service.TemperatureSensor) ||
-      this.accessory.addService(this.platform.Service.TemperatureSensor);
-    this.extractTemperature.setCharacteristic(
-      this.platform.Characteristic.Name,
-      'Extract',
-    );
+      this.accessory.getService('Extract') ||
+      this.accessory.addService(
+        this.platform.Service.TemperatureSensor,
+        'Extract',
+        'extract',
+      );
     this.extractTemperature
       .getCharacteristic(this.platform.Characteristic.CurrentTemperature)
       .onGet(this.getExtractTemperature.bind(this));
