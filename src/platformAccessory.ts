@@ -3,7 +3,7 @@ import type { PlatformAccessory, Service } from 'homebridge';
 import type { ExampleHomebridgePlatform } from './platform.js';
 
 export class ExamplePlatformAccessory {
-  private service: Service;
+  private supplyTemperature: Service;
 
   constructor(
     private readonly platform: ExampleHomebridgePlatform,
@@ -15,19 +15,19 @@ export class ExamplePlatformAccessory {
       .setCharacteristic(this.platform.Characteristic.Model, 'N/A')
       .setCharacteristic(this.platform.Characteristic.SerialNumber, 'N/A');
 
-    this.service =
+    this.supplyTemperature =
       this.accessory.getService(this.platform.Service.TemperatureSensor) ||
       this.accessory.addService(this.platform.Service.TemperatureSensor);
-    this.service.setCharacteristic(
+    this.supplyTemperature.setCharacteristic(
       this.platform.Characteristic.Name,
-      'Test', // TODO: accessory.context.device
+      'Supply Temperature',
     );
-    this.service
+    this.supplyTemperature
       .getCharacteristic(this.platform.Characteristic.CurrentTemperature)
-      .onGet(this.handleCurrentTemperatureGet.bind(this));
+      .onGet(this.handleSupplyTemperatureGet.bind(this));
   }
 
-  handleCurrentTemperatureGet() {
+  handleSupplyTemperatureGet() {
     this.platform.log.debug('Triggered GET CurrentTemperature');
 
     return 42; // TODO
