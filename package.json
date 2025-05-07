@@ -2,7 +2,7 @@
   "name": "homebridge-komfovent-modbus",
   "displayName": "Komfovent Modbus",
   "type": "module",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Komfovent integration through Modbus.",
   "author": "Pierre-Olivier Latour",
   "license": "Apache-2.0",
