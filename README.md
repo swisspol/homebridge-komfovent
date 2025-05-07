@@ -1,6 +1,6 @@
 ```
-npm run build
-npm publish
+npm run prepublishOnly
 
 npm version patch
+npm publish
 ```
